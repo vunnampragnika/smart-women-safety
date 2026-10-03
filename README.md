@@ -311,16 +311,3 @@ This software is an educational prototype provided "as is". It does not guarante
 ## 20. Contributors
 
 - VUNNAM PRAGNIKA
-
-## Git: upload to GitHub
-
-```
-git init
-git add .
-git commit -m "Initial commit: Smart Women Safety & Emergency Response System"
-git branch -M main
-git remote add origin https://github.com/<your-username>/smart-women-safety.git
-git push -u origin main
-```
-
-Check `git status` first: `.env`, `venv/` and `db.sqlite3` must not be listed.
