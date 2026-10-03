@@ -135,8 +135,8 @@ smart_women_safety/
 Requires Python 3.11 or newer (3.12 recommended) and internet access for installing packages.
 
 ```
-git clone <your-repository-url>
-cd smart_women_safety
+git clone https://github.com/vunnampragnika/smart-women-safety.git
+cd smart-women-safety
 python -m venv venv
 venv\Scripts\activate
 python -m pip install --upgrade pip
@@ -269,19 +269,17 @@ python manage.py test
 
 ## 16. Screenshots
 
-Add your own screenshots to a `screenshots/` folder and link them here.
+## 16. Screenshots
 
-| Page | Screenshot |
-|---|---|
-| Login / Register | `screenshots/login.png` |
-| Dashboard with SOS button | `screenshots/dashboard.png` |
-| SOS result with map | `screenshots/sos.png` |
-| Emergency contacts | `screenshots/contacts.png` |
-| Live location | `screenshots/location.png` |
-| Alert history | `screenshots/history.png` |
-| Safety check-in timer | `screenshots/checkin.png` |
-| Safety tips | `screenshots/tips.png` |
-| Admin panel | `screenshots/admin.png` |
+![Login](screenshots/login.png)
+![Dashboard](screenshots/dashboard.png)
+![SOS](screenshots/sos.png)
+![Contacts](screenshots/contacts.png)
+![Live Location](screenshots/location.png)
+![Alert History](screenshots/history.png)
+![Safety Check-In](screenshots/checkin.png)
+![Safety Tips](screenshots/tips.png)
+![Admin Panel](screenshots/admin.png)
 
 ## 17. Limitations
 
@@ -311,19 +309,3 @@ This software is an educational prototype provided "as is". It does not guarante
 ## 20. Contributors
 
 - VUNNAM PRAGNIKA
-<<<<<<< HEAD
-
-## Git: upload to GitHub
-
-```
-git init
-git add .
-git commit -m "Initial commit: Smart Women Safety & Emergency Response System"
-git branch -M main
-git remote add origin https://github.com/<your-username>/smart-women-safety.git
-git push -u origin main
-```
-
-Check `git status` first: `.env`, `venv/` and `db.sqlite3` must not be listed.
-=======
->>>>>>> 1bc41c6baa61320e3a2881bcf2fa0fe7e7f84b39
