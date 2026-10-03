@@ -310,7 +310,7 @@ This software is an educational prototype provided "as is". It does not guarante
 
 ## 20. Contributors
 
-- *Your Name* - developer (add your name, roll number and guide)
+- VUNNAM PRAGNIKA
 
 ## Git: upload to GitHub
 
