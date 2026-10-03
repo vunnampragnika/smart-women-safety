@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Safety Check-In{% endblock %}
+{% block content %}
+<h1 class="h3 mb-1">Safety check-in timer</h1>
+<p class="text-muted">Start a timer before a journey. If you do not press <strong>I AM SAFE</strong> before it ends, an alert is sent to your emergency contacts.</p>
+
+{% if contact_count == 0 %}
+<div class="alert alert-warning">You have no emergency contacts, so nobody would be notified. <a href="{% url 'contact_add' %}">Add a contact</a>.</div>
+{% endif %}
+
+<div id="checkin-message" class="alert d-none" role="status" aria-live="polite"></div>
+
+<div id="checkin-root" class="card"
+     data-start-url="{% url 'checkin_start' %}" data-safe-url="{% url 'checkin_safe' %}"
+     data-cancel-url="{% url 'checkin_cancel' %}" data-status-url="{% url 'checkin_status' %}"
+     data-expire-url="{% url 'checkin_expire' %}"
+     {% if active %}data-active-seconds="{{ active.seconds_remaining }}" data-active-duration="{{ active.duration }}"{% endif %}>
+  <div class="card-body p-4">
+    <div id="setup-panel">
+      <h2 class="h5">Choose a duration</h2>
+      <div class="d-flex flex-wrap gap-2 my-3" role="group" aria-label="Timer duration">
+        {% for minutes, label in durations %}
+        <button type="button" class="btn btn-outline-primary btn-lg" data-duration="{{ minutes }}" aria-pressed="false">{{ label }}</button>
+        {% endfor %}
+      </div>
+      <button type="button" id="start-timer" class="btn btn-primary btn-lg" disabled>Start timer</button>
+    </div>
+
+    <div id="running-panel" class="text-center d-none">
+      <p class="mb-0 text-muted">Time remaining</p>
+      <div id="countdown" aria-live="off">--:--</div>
+      <div class="progress my-3" style="height: 10px;">
+        <div id="countdown-bar" class="progress-bar" role="progressbar" style="width: 100%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" aria-label="Time remaining"></div>
+      </div>
+      <div class="d-flex flex-wrap justify-content-center gap-2">
+        <button type="button" id="safe-btn" class="btn btn-success btn-lg px-5"><i class="bi bi-check-circle"></i> I AM SAFE</button>
+        <button type="button" id="cancel-btn" class="btn btn-outline-secondary btn-lg">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mt-4">
+  <div class="card-header">Recent check-ins</div>
+  <div class="table-responsive">
+    <table class="table mb-0 align-middle">
+      <thead class="table-light"><tr><th>Started</th><th>Duration</th><th>Result</th></tr></thead>
+      <tbody>
+        {% for c in history %}
+        <tr>
+          <td>{{ c.started_at|date:"d M Y, H:i" }}</td>
+          <td>{{ c.duration }} min</td>
+          <td><span class="badge {% if c.status == 'SAFE' %}text-bg-success{% elif c.status == 'EXPIRED' %}text-bg-danger{% elif c.status == 'ACTIVE' %}text-bg-warning{% else %}text-bg-secondary{% endif %}">{{ c.get_status_display }}</span></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3" class="text-center text-muted py-3">No check-ins yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="alert alert-light border mt-4 small">
+  <strong>How it works and its limits:</strong> the server stores the end time and is the source of truth, so refreshing the page does not reset the timer.
+  The alert is raised when this page reaches zero, when you next open any page, or when the server command
+  <code>python manage.py process_expired_checkins --loop</code> is running. If you close the browser and that command is not running,
+  the alert is delayed until the next check.
+</div>
+{% endblock %}
+{% block scripts %}<script src="{% static 'js/checkin.js' %}"></script>{% endblock %}

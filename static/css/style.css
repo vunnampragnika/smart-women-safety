@@ -1,0 +1,44 @@
+:root {
+  --sws-primary: #6d28d9;
+  --sws-primary-dark: #5b21b6;
+  --sws-danger: #c62828;
+  --sws-danger-dark: #8e0000;
+  --sws-bg: #f6f5fa;
+}
+body { background: var(--sws-bg); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.navbar-sws { background: linear-gradient(90deg, var(--sws-primary-dark), var(--sws-primary)); }
+.navbar-sws .nav-link { color: rgba(255,255,255,.85); }
+.navbar-sws .nav-link:hover, .navbar-sws .nav-link.active { color: #fff; font-weight: 600; }
+.card { border: 0; box-shadow: 0 1px 4px rgba(0,0,0,.08); border-radius: .85rem; }
+.card-header { background: transparent; font-weight: 600; border-bottom: 1px solid rgba(0,0,0,.06); }
+
+/* SOS button */
+.sos-wrap { text-align: center; padding: 1rem 0; }
+#sos-button {
+  width: min(240px, 70vw); aspect-ratio: 1 / 1; border-radius: 50%;
+  border: 8px solid #ffcdd2; color: #fff; font-weight: 800;
+  background: radial-gradient(circle at 30% 30%, #ef5350, var(--sws-danger) 60%, var(--sws-danger-dark));
+  box-shadow: 0 8px 24px rgba(198,40,40,.45);
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: transform .1s ease;
+}
+#sos-button:hover:not(:disabled) { transform: scale(1.03); }
+#sos-button:active:not(:disabled) { transform: scale(.97); }
+#sos-button:focus-visible { outline: 4px solid #212529; outline-offset: 4px; }
+#sos-button:disabled { opacity: .7; }
+#sos-button .sos-text { font-size: 3rem; letter-spacing: .1em; line-height: 1; }
+#sos-button .sos-sub { font-size: .8rem; font-weight: 600; margin-top: .4rem; padding: 0 1rem; }
+
+.map-box { height: 320px; border-radius: .75rem; overflow: hidden; }
+.status-pill { font-size: 1.1rem; }
+.stat-link { text-decoration: none; color: inherit; }
+.quick-link { display: flex; align-items: center; gap: .6rem; padding: .8rem 1rem; border-radius: .75rem;
+  background: #fff; color: #212529; text-decoration: none; box-shadow: 0 1px 3px rgba(0,0,0,.08); font-weight: 500; }
+.quick-link:hover { background: #ede9fe; color: var(--sws-primary-dark); }
+.tip-card { border-top: 4px solid var(--sws-primary); }
+#countdown { font-size: clamp(3rem, 14vw, 5rem); font-weight: 700; font-variant-numeric: tabular-nums; }
+.timer-warning #countdown { color: var(--sws-danger); }
+.prototype-banner { font-size: .85rem; background: #fff8e1; border-bottom: 1px solid #ffe082; }
+.auth-card { max-width: 520px; margin: 2rem auto; }
+footer { color: #6c757d; font-size: .85rem; }
+@media (max-width: 575.98px) { .map-box { height: 260px; } }

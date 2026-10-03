@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Safety Tips{% endblock %}
+{% block content %}
+<h1 class="h3 mb-1">Safety tips</h1>
+<p class="text-muted">General awareness suggestions. They are not professional, medical or legal advice.</p>
+{% for group in groups %}
+<h2 class="h5 mt-4 mb-3">{{ group.label }}</h2>
+<div class="row g-3">
+  {% for tip in group.tips %}
+  <div class="col-md-6 col-lg-4">
+    <div class="card tip-card h-100"><div class="card-body">
+      <h3 class="h6">{{ tip.title }}</h3>
+      <p class="small mb-0">{{ tip.description }}</p>
+    </div></div>
+  </div>
+  {% endfor %}
+</div>
+{% empty %}
+<div class="alert alert-info">No tips yet. Run <code>python manage.py seed_data</code> or add tips in the admin panel.</div>
+{% endfor %}
+{% endblock %}

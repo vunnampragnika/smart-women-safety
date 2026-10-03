@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Live Location{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Live location</h1>
+<div id="loc-error" class="alert alert-danger d-none" role="alert"></div>
+<div class="row g-4">
+  <div class="col-lg-4">
+    <div class="card"><div class="card-body">
+      <dl class="mb-3">
+        <dt>Latitude</dt><dd id="loc-lat" class="fs-5">-</dd>
+        <dt>Longitude</dt><dd id="loc-lon" class="fs-5">-</dd>
+        <dt>Accuracy</dt><dd id="loc-acc">-</dd>
+        <dt>Last updated</dt><dd id="loc-time">-</dd>
+      </dl>
+      <div class="d-grid gap-2">
+        <button type="button" id="get-location" class="btn btn-primary">Get current location</button>
+        <a id="loc-link" class="btn btn-outline-primary disabled" aria-disabled="true" href="#" target="_blank" rel="noopener">Open in Google Maps</a>
+        <button type="button" id="copy-link" class="btn btn-outline-secondary" disabled>Copy link</button>
+      </div>
+      <p class="small text-muted mt-3 mb-0">Your browser will ask for permission. Location is only sent to the server when you trigger an SOS or a check-in alert.</p>
+    </div></div>
+  </div>
+  <div class="col-lg-8">
+    <div class="card"><div class="card-body p-2">
+      <div id="live-map" class="map-box d-flex align-items-center justify-content-center text-muted">Map appears after your location is found.</div>
+    </div></div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{% static 'js/location.js' %}"></script>{% endblock %}

@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+  <div>
+    <h1 class="h3 mb-0">Hello, {{ user.first_name|default:user.username }}</h1>
+    <span class="text-muted">Your safety dashboard</span>
+  </div>
+  <span class="badge text-bg-{{ safety_status.level }} status-pill py-2 px-3" title="{{ safety_status.detail }}">
+    <i class="bi bi-shield-fill-check me-1"></i>{{ safety_status.text }}
+  </span>
+</div>
+
+{% if open_alert %}
+<div class="alert alert-danger d-flex flex-wrap justify-content-between align-items-center gap-2">
+  <span><strong>{{ open_alert.get_alert_type_display }}</strong> alert on {{ open_alert.created_at|date:"d M Y, H:i" }} ({{ open_alert.get_status_display }}).</span>
+  <form method="post" action="{% url 'alert_resolve' open_alert.pk %}">
+    {% csrf_token %}<input type="hidden" name="next" value="{% url 'dashboard' %}">
+    <button class="btn btn-sm btn-outline-danger">I am safe - mark resolved</button>
+  </form>
+</div>
+{% endif %}
+
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="card h-100">
+      <div class="card-header">Emergency SOS</div>
+      <div class="card-body">
+        {% if not contacts %}
+        <div class="alert alert-warning">No emergency contacts yet. <a href="{% url 'contact_add' %}">Add one</a> so alerts reach someone.</div>
+        {% endif %}
+        {% include "safety/_sos_widget.html" %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="row g-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">Quick access</div>
+          <div class="card-body">
+            <div class="row g-2">
+              <div class="col-6"><a class="quick-link" href="{% url 'sos' %}"><i class="bi bi-exclamation-octagon text-danger"></i>SOS</a></div>
+              <div class="col-6"><a class="quick-link" href="{% url 'location' %}"><i class="bi bi-geo-alt text-primary"></i>Location</a></div>
+              <div class="col-6"><a class="quick-link" href="{% url 'contact_list' %}"><i class="bi bi-people text-primary"></i>Contacts</a></div>
+              <div class="col-6"><a class="quick-link" href="{% url 'alert_history' %}"><i class="bi bi-clock-history text-primary"></i>Alert History</a></div>
+              <div class="col-6"><a class="quick-link" href="{% url 'checkin' %}"><i class="bi bi-stopwatch text-warning"></i>Check-In Timer</a></div>
+              <div class="col-6"><a class="quick-link" href="{% url 'profile' %}"><i class="bi bi-person text-primary"></i>Profile</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">Location status</div>
+          <div class="card-body">
+            <p id="dash-location-status" class="mb-2 text-muted">Location not checked yet.</p>
+            <button type="button" id="dash-check-location" class="btn btn-outline-primary btn-sm">Check location access</button>
+          </div>
+        </div>
+      </div>
+      {% if active_checkin %}
+      <div class="col-12">
+        <div class="alert alert-warning mb-0">
+          <i class="bi bi-stopwatch"></i> A {{ active_checkin.duration }}-minute check-in timer is running.
+          <a href="{% url 'checkin' %}" class="alert-link">Open timer</a>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between"><span>Emergency contacts</span><a href="{% url 'contact_list' %}" class="small">Manage</a></div>
+      <ul class="list-group list-group-flush">
+        {% for c in contacts %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span><strong>{{ c.name }}</strong> <span class="text-muted small">{{ c.get_relationship_display }}</span><br><span class="small">{{ c.phone }}</span></span>
+          <span class="badge text-bg-secondary">P{{ c.priority }}</span>
+        </li>
+        {% empty %}
+        <li class="list-group-item text-muted">No contacts yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between"><span>Recent alerts</span><a href="{% url 'alert_history' %}" class="small">View all</a></div>
+      <ul class="list-group list-group-flush">
+        {% for a in recent_alerts %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span>{{ a.get_alert_type_display }}<br><span class="small text-muted">{{ a.created_at|date:"d M Y, H:i" }}</span></span>
+          <span class="badge {% if a.status == 'RESOLVED' %}text-bg-success{% elif a.status == 'NOTIFIED' %}text-bg-primary{% else %}text-bg-warning{% endif %}">{{ a.get_status_display }}</span>
+        </li>
+        {% empty %}
+        <li class="list-group-item text-muted">No alerts yet. That is good news.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="d-flex justify-content-between align-items-center mb-2"><h2 class="h5 mb-0">Safety tips</h2><a href="{% url 'tips' %}" class="small">All tips</a></div>
+    <div class="row g-3">
+      {% for tip in tips %}
+      <div class="col-md-4"><div class="card tip-card h-100"><div class="card-body">
+        <span class="badge text-bg-light mb-2">{{ tip.get_category_display }}</span>
+        <h3 class="h6">{{ tip.title }}</h3><p class="small mb-0">{{ tip.description }}</p>
+      </div></div></div>
+      {% empty %}
+      <div class="col-12 text-muted">No tips yet. Run <code>python manage.py seed_data</code>.</div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/sos.js' %}"></script>
+<script>
+(function () {
+  var status = document.getElementById("dash-location-status");
+  var btn = document.getElementById("dash-check-location");
+  function check() {
+    status.className = "mb-2 text-muted";
+    status.textContent = "Checking...";
+    SWS.getLocation({ timeout: 10000, maximumAge: 60000 }).then(function (p) {
+      status.className = "mb-2 text-success";
+      status.textContent = "Location available (accuracy about " + Math.round(p.accuracy || 0) + " m). SOS is ready.";
+    }).catch(function (e) {
+      status.className = "mb-2 text-danger";
+      status.textContent = e.message;
+    });
+  }
+  btn.addEventListener("click", check);
+  if (navigator.permissions && navigator.permissions.query) {
+    navigator.permissions.query({ name: "geolocation" }).then(function (r) {
+      if (r.state === "granted") check();
+      else if (r.state === "denied") { status.className = "mb-2 text-danger"; status.textContent = "Location permission is blocked for this site. Allow it in your browser settings."; }
+      else status.textContent = "Location permission not granted yet. You will be asked when you press SOS.";
+    }).catch(function () {});
+  }
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Delete contact{% endblock %}
+{% block content %}
+<div class="card auth-card" style="max-width: 520px;">
+  <div class="card-body p-4">
+    <h1 class="h4">Delete contact?</h1>
+    <p>Remove <strong>{{ contact.name }}</strong> ({{ contact.get_relationship_display }}) from your emergency contacts? They will no longer receive alerts.</p>
+    <form method="post">
+      {% csrf_token %}
+      <button class="btn btn-danger" type="submit">Yes, delete</button>
+      <a href="{% url 'contact_list' %}" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

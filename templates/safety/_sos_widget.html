@@ -1,0 +1,30 @@
+<div class="sos-wrap" id="sos">
+  <button type="button" id="sos-button" data-url="{% url 'sos_trigger' %}" aria-describedby="sos-help">
+    <span class="sos-text">SOS</span>
+    <span class="sos-sub">Press to send an emergency alert</span>
+  </button>
+  <p id="sos-help" class="small text-muted mt-3 mb-0">
+    You will be asked to confirm. Your location is shared with your emergency contacts.
+  </p>
+</div>
+<div id="sos-status" class="alert d-none" role="status" aria-live="polite"></div>
+<div id="sos-map" class="map-box d-none mt-3"></div>
+
+<div class="modal fade" id="sosConfirmModal" tabindex="-1" aria-labelledby="sosConfirmLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h2 class="modal-title h5" id="sosConfirmLabel"><i class="bi bi-exclamation-triangle-fill me-2"></i>Send emergency alert?</h2>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>This will share your <strong>current location</strong> and notify your emergency contacts.</p>
+        <p class="small text-muted mb-0">Prototype notice: it does not contact police or emergency services. In real danger, call your local emergency number.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="sos-confirm">Yes, send alert</button>
+      </div>
+    </div>
+  </div>
+</div>
