@@ -311,6 +311,7 @@ This software is an educational prototype provided "as is". It does not guarante
 ## 20. Contributors
 
 - VUNNAM PRAGNIKA
+<<<<<<< HEAD
 
 ## Git: upload to GitHub
 
@@ -324,3 +325,5 @@ git push -u origin main
 ```
 
 Check `git status` first: `.env`, `venv/` and `db.sqlite3` must not be listed.
+=======
+>>>>>>> 1bc41c6baa61320e3a2881bcf2fa0fe7e7f84b39
